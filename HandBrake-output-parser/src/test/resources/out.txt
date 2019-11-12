@@ -1,0 +1,477 @@
+-rwxrwxrwx 1 1024 users 3252162 nov 10 23:45 /mnt/teenanas/video-a-trier/2-to_compress/1-inbox/2019-08-13-10h12m29s241.mov
+total 18697404
+-rwxrwxrwx 1 1026 users 19146138119 nov  8  2018 La ligne rouge.mp4
+REMOTE_WIP: /mnt/teenanas/video-a-trier/2-to_compress/2-in_progress
+REMOTE_WIP/filename: /mnt/teenanas/video-a-trier/2-to_compress/2-in_progress/2019-08-13-10h12m29s241.mov
+LOCAL_INBOX/filename: /home/dimitri/Vidéos/transcode-workflow/1-inbox/2019-08-13-10h12m29s241.mov
+total 18700580
+-rwxrwxrwx 1 1024 users     3252162 nov 10 23:45 2019-08-13-10h12m29s241.mov
+-rwxrwxrwx 1 1026 users 19146138119 nov  8  2018 La ligne rouge.mp4
+total 0
+Version: {
+    "Arch": "x86_64",
+    "Name": "HandBrake",
+    "Official": true,
+    "RepoDate": "2019-11-09 20:44:32",
+    "RepoHash": "4672248655ddd687161bacdb539c208abde15c59",
+    "System": "Linux",
+    "Type": "release",
+    "Version": {
+        "Major": 1,
+        "Minor": 3,
+        "Point": 0
+    },
+    "VersionString": "1.3.0"
+}
+Progress: {
+    "Scanning": {
+        "Preview": 1,
+        "PreviewCount": 10,
+        "Progress": 0.10000000149011612,
+        "SequenceID": 0,
+        "Title": 1,
+        "TitleCount": 1
+    },
+    "State": "SCANNING"
+}
+Progress: {
+    "Scanning": {
+        "Preview": 3,
+        "PreviewCount": 10,
+        "Progress": 0.30000001192092896,
+        "SequenceID": 0,
+        "Title": 1,
+        "TitleCount": 1
+    },
+    "State": "SCANNING"
+}
+Progress: {
+    "Scanning": {
+        "Preview": 6,
+        "PreviewCount": 10,
+        "Progress": 0.60000002384185791,
+        "SequenceID": 0,
+        "Title": 1,
+        "TitleCount": 1
+    },
+    "State": "SCANNING"
+}
+Progress: {
+    "Scanning": {
+        "Preview": 10,
+        "PreviewCount": 10,
+        "Progress": 1.0,
+        "SequenceID": 0,
+        "Title": 1,
+        "TitleCount": 1
+    },
+    "State": "SCANNING"
+}
+Progress: {
+    "State": "WORKING",
+    "Working": {
+        "ETASeconds": 0,
+        "Hours": -1,
+        "Minutes": -1,
+        "Pass": 1,
+        "PassCount": 1,
+        "PassID": 0,
+        "Paused": 0,
+        "Progress": 0.0,
+        "Rate": 0.0,
+        "RateAvg": 0.0,
+        "Seconds": -1,
+        "SequenceID": 1
+    }
+}
+Progress: {
+    "State": "WORKING",
+    "Working": {
+        "ETASeconds": 0,
+        "Hours": -1,
+        "Minutes": -1,
+        "Pass": 1,
+        "PassCount": 1,
+        "PassID": 0,
+        "Paused": 0,
+        "Progress": 0.086419753730297089,
+        "Rate": 0.0,
+        "RateAvg": 0.0,
+        "Seconds": -1,
+        "SequenceID": 1
+    }
+}
+Progress: {
+    "State": "WORKING",
+    "Working": {
+        "ETASeconds": 0,
+        "Hours": -1,
+        "Minutes": -1,
+        "Pass": 1,
+        "PassCount": 1,
+        "PassID": 0,
+        "Paused": 0,
+        "Progress": 0.2222222238779068,
+        "Rate": 0.0,
+        "RateAvg": 0.0,
+        "Seconds": -1,
+        "SequenceID": 1
+    }
+}
+Progress: {
+    "State": "WORKING",
+    "Working": {
+        "ETASeconds": 0,
+        "Hours": -1,
+        "Minutes": -1,
+        "Pass": 1,
+        "PassCount": 1,
+        "PassID": 0,
+        "Paused": 0,
+        "Progress": 0.30864197015762329,
+        "Rate": 0.0,
+        "RateAvg": 0.0,
+        "Seconds": -1,
+        "SequenceID": 1
+    }
+}
+Progress: {
+    "State": "WORKING",
+    "Working": {
+        "ETASeconds": 0,
+        "Hours": -1,
+        "Minutes": -1,
+        "Pass": 1,
+        "PassCount": 1,
+        "PassID": 0,
+        "Paused": 0,
+        "Progress": 0.45679011940956116,
+        "Rate": 2.0972207082081695e-8,
+        "RateAvg": 0.0,
+        "Seconds": -1,
+        "SequenceID": 1
+    }
+}
+Progress: {
+    "State": "WORKING",
+    "Working": {
+        "ETASeconds": 0,
+        "Hours": -1,
+        "Minutes": -1,
+        "Pass": 1,
+        "PassCount": 1,
+        "PassID": 0,
+        "Paused": 0,
+        "Progress": 0.50617283582687378,
+        "Rate": 2.0972207082081695e-8,
+        "RateAvg": 0.0,
+        "Seconds": -1,
+        "SequenceID": 1
+    }
+}
+Progress: {
+    "State": "WORKING",
+    "Working": {
+        "ETASeconds": 0,
+        "Hours": -1,
+        "Minutes": -1,
+        "Pass": 1,
+        "PassCount": 1,
+        "PassID": 0,
+        "Paused": 0,
+        "Progress": 0.50617283582687378,
+        "Rate": 2.0972207082081695e-8,
+        "RateAvg": 0.0,
+        "Seconds": -1,
+        "SequenceID": 1
+    }
+}
+Progress: {
+    "State": "WORKING",
+    "Working": {
+        "ETASeconds": 0,
+        "Hours": -1,
+        "Minutes": -1,
+        "Pass": 1,
+        "PassCount": 1,
+        "PassID": 0,
+        "Paused": 0,
+        "Progress": 0.50617283582687378,
+        "Rate": 2.0972207082081695e-8,
+        "RateAvg": 0.0,
+        "Seconds": -1,
+        "SequenceID": 1
+    }
+}
+Progress: {
+    "State": "WORKING",
+    "Working": {
+        "ETASeconds": 0,
+        "Hours": -1,
+        "Minutes": -1,
+        "Pass": 1,
+        "PassCount": 1,
+        "PassID": 0,
+        "Paused": 0,
+        "Progress": 0.50617283582687378,
+        "Rate": 2.0972207082081695e-8,
+        "RateAvg": 0.0,
+        "Seconds": -1,
+        "SequenceID": 1
+    }
+}
+Progress: {
+    "State": "WORKING",
+    "Working": {
+        "ETASeconds": 0,
+        "Hours": -1,
+        "Minutes": -1,
+        "Pass": 1,
+        "PassCount": 1,
+        "PassID": 0,
+        "Paused": 0,
+        "Progress": 0.50617283582687378,
+        "Rate": 2.0972207082081695e-8,
+        "RateAvg": 0.0,
+        "Seconds": -1,
+        "SequenceID": 1
+    }
+}
+Progress: {
+    "State": "WORKING",
+    "Working": {
+        "ETASeconds": 0,
+        "Hours": -1,
+        "Minutes": -1,
+        "Pass": 1,
+        "PassCount": 1,
+        "PassID": 0,
+        "Paused": 0,
+        "Progress": 0.50617283582687378,
+        "Rate": 2.0972207082081695e-8,
+        "RateAvg": 0.0,
+        "Seconds": -1,
+        "SequenceID": 1
+    }
+}
+Progress: {
+    "State": "WORKING",
+    "Working": {
+        "ETASeconds": 0,
+        "Hours": -1,
+        "Minutes": -1,
+        "Pass": 1,
+        "PassCount": 1,
+        "PassID": 0,
+        "Paused": 0,
+        "Progress": 0.50617283582687378,
+        "Rate": 2.0972207082081695e-8,
+        "RateAvg": 0.0,
+        "Seconds": -1,
+        "SequenceID": 1
+    }
+}
+Progress: {
+    "State": "WORKING",
+    "Working": {
+        "ETASeconds": 0,
+        "Hours": -1,
+        "Minutes": -1,
+        "Pass": 1,
+        "PassCount": 1,
+        "PassID": 0,
+        "Paused": 0,
+        "Progress": 0.50617283582687378,
+        "Rate": 2.0972207082081695e-8,
+        "RateAvg": 0.0,
+        "Seconds": -1,
+        "SequenceID": 1
+    }
+}
+Progress: {
+    "State": "WORKING",
+    "Working": {
+        "ETASeconds": 0,
+        "Hours": -1,
+        "Minutes": -1,
+        "Pass": 1,
+        "PassCount": 1,
+        "PassID": 0,
+        "Paused": 0,
+        "Progress": 0.50617283582687378,
+        "Rate": 2.0972207082081695e-8,
+        "RateAvg": 0.0,
+        "Seconds": -1,
+        "SequenceID": 1
+    }
+}
+Progress: {
+    "State": "WORKING",
+    "Working": {
+        "ETASeconds": 0,
+        "Hours": -1,
+        "Minutes": -1,
+        "Pass": 1,
+        "PassCount": 1,
+        "PassID": 0,
+        "Paused": 0,
+        "Progress": 0.50617283582687378,
+        "Rate": 2.0972207082081695e-8,
+        "RateAvg": 0.0,
+        "Seconds": -1,
+        "SequenceID": 1
+    }
+}
+Progress: {
+    "State": "WORKING",
+    "Working": {
+        "ETASeconds": 0,
+        "Hours": -1,
+        "Minutes": -1,
+        "Pass": 1,
+        "PassCount": 1,
+        "PassID": 0,
+        "Paused": 0,
+        "Progress": 0.50617283582687378,
+        "Rate": 2.0972207082081695e-8,
+        "RateAvg": 0.0,
+        "Seconds": -1,
+        "SequenceID": 1
+    }
+}
+Progress: {
+    "State": "WORKING",
+    "Working": {
+        "ETASeconds": 0,
+        "Hours": -1,
+        "Minutes": -1,
+        "Pass": 1,
+        "PassCount": 1,
+        "PassID": 0,
+        "Paused": 0,
+        "Progress": 0.50617283582687378,
+        "Rate": 2.0972207082081695e-8,
+        "RateAvg": 0.0,
+        "Seconds": -1,
+        "SequenceID": 1
+    }
+}
+Progress: {
+    "State": "WORKING",
+    "Working": {
+        "ETASeconds": 0,
+        "Hours": -1,
+        "Minutes": -1,
+        "Pass": 1,
+        "PassCount": 1,
+        "PassID": 0,
+        "Paused": 0,
+        "Progress": 0.50617283582687378,
+        "Rate": 2.0972207082081695e-8,
+        "RateAvg": 0.0,
+        "Seconds": -1,
+        "SequenceID": 1
+    }
+}
+Progress: {
+    "State": "WORKING",
+    "Working": {
+        "ETASeconds": 0,
+        "Hours": -1,
+        "Minutes": -1,
+        "Pass": 1,
+        "PassCount": 1,
+        "PassID": 0,
+        "Paused": 0,
+        "Progress": 0.50617283582687378,
+        "Rate": 2.0972207082081695e-8,
+        "RateAvg": 0.0,
+        "Seconds": -1,
+        "SequenceID": 1
+    }
+}
+Progress: {
+    "State": "WORKING",
+    "Working": {
+        "ETASeconds": 0,
+        "Hours": -1,
+        "Minutes": -1,
+        "Pass": 1,
+        "PassCount": 1,
+        "PassID": 0,
+        "Paused": 0,
+        "Progress": 0.50617283582687378,
+        "Rate": 2.0972207082081695e-8,
+        "RateAvg": 0.0,
+        "Seconds": -1,
+        "SequenceID": 1
+    }
+}
+Progress: {
+    "State": "WORKING",
+    "Working": {
+        "ETASeconds": 0,
+        "Hours": -1,
+        "Minutes": -1,
+        "Pass": 1,
+        "PassCount": 1,
+        "PassID": 0,
+        "Paused": 0,
+        "Progress": 0.50617283582687378,
+        "Rate": 2.0972207082081695e-8,
+        "RateAvg": 0.0,
+        "Seconds": -1,
+        "SequenceID": 1
+    }
+}
+Progress: {
+    "State": "WORKING",
+    "Working": {
+        "ETASeconds": 0,
+        "Hours": -1,
+        "Minutes": -1,
+        "Pass": 1,
+        "PassCount": 1,
+        "PassID": 0,
+        "Paused": 0,
+        "Progress": 0.50617283582687378,
+        "Rate": 2.0972207082081695e-8,
+        "RateAvg": 0.0,
+        "Seconds": -1,
+        "SequenceID": 1
+    }
+}
+Progress: {
+    "State": "WORKING",
+    "Working": {
+        "ETASeconds": 0,
+        "Hours": -1,
+        "Minutes": -1,
+        "Pass": 1,
+        "PassCount": 1,
+        "PassID": 0,
+        "Paused": 0,
+        "Progress": 0.50617283582687378,
+        "Rate": 2.0972207082081695e-8,
+        "RateAvg": 0.0,
+        "Seconds": -1,
+        "SequenceID": 1
+    }
+}
+Progress: {
+    "State": "WORKDONE",
+    "WorkDone": {
+        "Error": 0,
+        "SequenceID": 1
+    }
+}
+
+Transcoded file successfully moved to /mnt/teenanas/video-a-trier/2-to_compress/3-done
+/mnt/teenanas/video-a-trier/2-to_compress/3-done:
+total 1688
+-rw-r--r-- 1 1024 1728136 nov 11 23:24 2019-08-13-10h12m29s241.mp4
+drwxrwxrwx 1 1024      54 nov 11 23:24 orig
+
+/mnt/teenanas/video-a-trier/2-to_compress/3-done/orig:
+total 3176
+-rwxrwxrwx 1 1024 3252162 nov 10 23:45 2019-08-13-10h12m29s241.mov
