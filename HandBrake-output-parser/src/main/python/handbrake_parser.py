@@ -3,26 +3,45 @@
 # Inspired by https://stackoverflow.com/a/49178529/967410
 
 import sys
+import zmq
 import json
 from json import JSONDecodeError
 from typing import Any
 
-import yaml
 import logging
 import logging.config
+from datetime import datetime
+import utils
 
 logger = logging.getLogger(__name__)
 
+port: int = 5678
+socket: zmq.Socket
 
-def setup_logging() -> None:
-    with open("../resources/logging.yaml", "r") as file:  # FIXME Relative path
-        config = yaml.safe_load(file.read())
-        logging.config.dictConfig(config)
+
+def setup_zmq() -> None:
+    global socket
+    global port
+    context = zmq.Context()
+    socket = context.socket(zmq.PUB)
+    socket.bind("tcp://127.0.0.1:%s" % port)
 
 
 def handle_event(event: dict, event_type: str) -> None:
     logging.info(f"[{event_type}] {json.dumps(event, sort_keys=True, default=str)}")
-    # TODO Add timestamp and forward message to downstream (0MQ?)
+    # Add timestamp and forward message to downstream
+    event["timestamp"] = datetime.now()
+    event["type"] = event_type
+
+    send_message("foo", json.dumps(event, default=str))
+
+
+def send_message(topic: str, payload: str):
+    # message: str = payload
+    # if topic is not None and len(topic) > 0:
+    #     message = f"{topic} {payload}"
+    # socket.send_string(message)
+    socket.send_multipart([bytes(topic, "UTF-8"), bytes(payload, "UTF-8")])
 
 
 # TODO Use more generic regex instead of string comparisons
@@ -60,5 +79,6 @@ def main(argv: [str]) -> None:
 
 
 if __name__ == '__main__':
-    setup_logging()
+    utils.setup_logging()
+    setup_zmq()
     main(sys.argv)
