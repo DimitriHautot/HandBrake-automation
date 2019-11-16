@@ -24,7 +24,6 @@ socket.setsockopt_string(zmq.SUBSCRIBE, "foo")
 socket.connect("tcp://127.0.0.1:%s" % port)
 
 while True:
-    # event = socket.recv()
     topic, event = socket.recv_multipart()
     msg = bytes(event).decode("UTF-8")
     logging.info(msg)
