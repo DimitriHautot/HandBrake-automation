@@ -1,5 +1,5 @@
 #!/user/bin/env python3
-
+import random
 import time
 import sys
 import signal
@@ -38,46 +38,46 @@ def main(argv: [str]) -> None:
     }
     scans = [
         {
-        "Scanning": {
-            "Preview": 1,
-            "PreviewCount": 10,
-            "Progress": 0.10000000149011612,
-            "SequenceID": 0,
-            "Title": 1,
-            "TitleCount": 1
-        },
-        "State": "SCANNING"
-    }, {
-        "Scanning": {
-            "Preview": 3,
-            "PreviewCount": 10,
-            "Progress": 0.30000001192092896,
-            "SequenceID": 0,
-            "Title": 1,
-            "TitleCount": 1
-        },
-        "State": "SCANNING"
-    }, {
-        "Scanning": {
-            "Preview": 6,
-            "PreviewCount": 10,
-            "Progress": 0.60000002384185791,
-            "SequenceID": 0,
-            "Title": 1,
-            "TitleCount": 1
-        },
-        "State": "SCANNING"
-    }, {
-        "Scanning": {
-            "Preview": 10,
-            "PreviewCount": 10,
-            "Progress": 1.0,
-            "SequenceID": 0,
-            "Title": 1,
-            "TitleCount": 1
-        },
-        "State": "SCANNING"
-    }]
+            "Scanning": {
+                "Preview": 1,
+                "PreviewCount": 10,
+                "Progress": 0.10000000149011612,
+                "SequenceID": 0,
+                "Title": 1,
+                "TitleCount": 1
+            },
+            "State": "SCANNING"
+        }, {
+            "Scanning": {
+                "Preview": 3,
+                "PreviewCount": 10,
+                "Progress": 0.30000001192092896,
+                "SequenceID": 0,
+                "Title": 1,
+                "TitleCount": 1
+            },
+            "State": "SCANNING"
+        }, {
+            "Scanning": {
+                "Preview": 6,
+                "PreviewCount": 10,
+                "Progress": 0.60000002384185791,
+                "SequenceID": 0,
+                "Title": 1,
+                "TitleCount": 1
+            },
+            "State": "SCANNING"
+        }, {
+            "Scanning": {
+                "Preview": 10,
+                "PreviewCount": 10,
+                "Progress": 1.0,
+                "SequenceID": 0,
+                "Title": 1,
+                "TitleCount": 1
+            },
+            "State": "SCANNING"
+        }]
     working = {
         "State": "WORKING",
         "Working": {
@@ -95,22 +95,30 @@ def main(argv: [str]) -> None:
             "SequenceID": 1
         }
     }
+    workdone = {
+        "State": "WORKDONE",
+        "WorkDone": {
+            "Error": 0,
+            "SequenceID": 1
+        }
+    }
 
-    handbrake_parser.handle_event(version, "Version")
-    time.sleep(0.5)
-
-    for scan in scans:
-        handbrake_parser.handle_event(scan, "Progress")
-        time.sleep(0.5)
-
-    progress = -1
     while True:
-        progress += 1
-        working["Working"]["Progress"] = float(progress % 100) / 100
-        handbrake_parser.handle_event(working, "Progress")
+        handbrake_parser.handle_event(version, "Version")
         time.sleep(1)
 
-    pass
+        for scan in scans:
+            handbrake_parser.handle_event(scan, "Progress")
+            time.sleep(1)
+
+        for pc in range(1, 100):
+            working["Working"]["Progress"] = float(pc % 100) / 100
+            working["Working"]["RateAvg"] = float(random.randrange(15, 35) / 100)
+            handbrake_parser.handle_event(working, "Progress")
+            time.sleep(0.25)
+
+        handbrake_parser.handle_event(workdone, "Progress")
+        time.sleep(3)
 
 
 if __name__ == '__main__':

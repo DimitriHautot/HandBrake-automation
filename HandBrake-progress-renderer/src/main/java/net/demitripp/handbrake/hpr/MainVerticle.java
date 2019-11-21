@@ -32,23 +32,16 @@ public class MainVerticle extends AbstractVerticle {
 
     router.route("/event-bus/*").handler(sockJSHandler);
 
-    StaticHandler staticHandler = StaticHandler.create();
+    StaticHandler staticHandler = StaticHandler.create()
+      .setFilesReadOnly(false)  // TODO Conditional to development mode?
+      .setCachingEnabled(false)
+      ;
     router.route("/static/*").handler(staticHandler);
     router.route("/*").handler(staticHandler);
 
     HttpServer server = vertx.createHttpServer();
 
-//    router.route().handler(routingContext -> {
-//
-//      // This handler will be called for every request
-//      HttpServerResponse response = routingContext.response();
-//      response.putHeader("content-type", "text/plain");
-//
-//      // Write to the response and end it
-//      response.end("Hello World from Vert.x-Web!");
-//    });
-
-    server.requestHandler(router).listen(80);
+    server.requestHandler(router).listen(8888);
     startPromise.complete();
   }
 }

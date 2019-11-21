@@ -1,12 +1,16 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>101</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+  <title>HandBrake Transcoding Progress</title>
 
   <script src="http://cdn.jsdelivr.net/sockjs/0.3.4/sockjs.min.js"></script>
   <script src='/static/js/vertx-eventbus.js'></script>
-<!--  <script src='/static/vertx-web-3.8.3-client.js'></script>-->
+  <!--  <script src='/static/vertx-web-3.8.3-client.js'></script>-->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
 
   <script>
       var options = {
@@ -16,23 +20,133 @@
           vertxbus_reconnect_exponent: 2, // Exponential backoff factor
           vertxbus_randomization_factor: 0.5 // Randomization factor between 0 and 1
       };
-      var eb = new EventBus('http://localhost:80/event-bus', options);
+      var eb = new EventBus('http://localhost:8888/event-bus', options);
       eb.enableReconnect(true);
 
-      eb.onopen = function() {
-          console.log("onopen");
+      eb.onopen = function () {
+          var cache = {
+              "status": $("#status"),
+              "progress": $("#progress"),
+
+              "scanning-summary": $("#scanning-summary"),
+              "preview": $("#preview"),
+              "previewCount": $("#previewCount"),
+              "title": $("#title"),
+              "titleCount": $("#titleCount"),
+              "sequenceID-SCANNING": $("#sequenceID-SCANNING"),
+
+              "working-summary": $("#working-summary"),
+              "pass": $("#pass"),
+              "passCount": $("#passCount"),
+
+              "workdone-summary": $("#workdone-summary"),
+              "errorCount": $("#errorCount"),
+              "sequenceID-WORKDONE": $("#sequenceID-WORKDONE")
+          };
           // set a handler to receive a message
-          eb.registerHandler('encoding.update', function(error, message) {
-              // console.log('received a message: ' + JSON.stringify(message));
-              console.log('Message type: ' + message.type);
-              console.log('Message address: ' + message.address);
-              console.log('Message body: ' + message.body);
+          eb.registerHandler('encoding.update', function (error, message) {
+              var body = JSON.parse(message.body);
+              if (body["type"] && body["type"] === "Progress") {
+                  onProgressMessage(body, cache);
+              }
           });
       };
 
+      function onProgressMessage(messageBody, cache) {
+          var status, progress, hb_body;
+          switch (messageBody["State"]) {
+              case "SCANNING":
+                  status = "Scanning";
+                  hb_body = messageBody["Scanning"];
+                  progress = hb_body["Progress"];
+                  cache["preview"].text(hb_body["Preview"]);
+                  cache["previewCount"].text(hb_body["PreviewCount"]);
+                  cache["title"].text(hb_body["Title"]);
+                  cache["titleCount"].text(hb_body["TitleCount"]);
+                  cache["sequenceID-SCANNING"].text(hb_body["SequenceID"]);
+                  cache["scanning-summary"].show();
+                  cache["working-summary"].hide();
+                  cache["workdone-summary"].hide();
+                  break;
+
+              case "WORKING":
+                  status = "Working";
+                  hb_body = messageBody["Working"];
+                  progress = hb_body["Progress"];
+                  cache["pass"].text(hb_body["Pass"]);
+                  cache["passCount"].text(hb_body["PassCount"]);
+                  cache["rateAvg"].text(parseFloat(hb_body["RateAvg"]).toFixed(2));
+                  cache["scanning-summary"].hide();
+                  cache["working-summary"].show();
+                  cache["workdone-summary"].hide();
+                  break;
+
+              case "WORKDONE":
+                  status = "Work done";
+                  hb_body = messageBody["WorkDone"];
+                  progress = 1;
+                  $("#errorCount").text(hb_body["Error"]);
+                  cache["sequenceID-WORKDONE"].text(hb_body["SequenceID"]);
+                  cache["scanning-summary"].hide();
+                  cache["working-summary"].hide();
+                  cache["workdone-summary"].show();
+                  break;
+          }
+          var progressPercent = Math.round(progress * 100);
+
+          cache["status"].text(status);
+          cache["progress"].text(progressPercent + "%");
+          cache["progress"].attr("aria-valuenow", progressPercent);
+          cache["progress"].width(progressPercent + "%");
+      }
   </script>
 </head>
 <body>
-  Joepie
+<div class="jumbotron text-center">
+  <h2>Home HandBrake Transcoding Progress</h2>
+  <p>Give some insights about the current transcoding jobs</p>
+</div>
+
+<div class="container">
+  <div class="row">
+    <div class="col-sm-12">
+      <div id="status-summary">
+        <p>State: <span id="status"></span></p>
+      </div>
+
+        <div class="progress w-100">
+          <div id="progress" class="progress-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">0%</div>
+        </div>
+
+      <div id="scanning-summary">
+        <p>Preview: <span id="preview"></span>/<span id="previewCount"></span></p>
+        <p>Title: <span id="title"></span>/<span id="titleCount"></span></p>
+        <p>Sequence ID: <span id="sequenceID-SCANNING"></span></p>
+      </div>
+      <div id="working-summary">
+        <p>Rate: <span id="rateAvg">0</span> FPS</p>
+        <p>Pass: <span id="pass"></span>/<span id="passCount"></span></p>
+        <p>ETA: <span id="eta">Today at 16:44</span></p>
+      </div>
+      <div id="workdone-summary">
+        <p>Errors: <span id="errorCount"></span></p>
+        <p>Sequence ID: <span id="sequenceID-WORKDONE"></span></p>
+      </div>
+
+      <p>
+        <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseExample"
+                aria-expanded="false" aria-controls="collapseExample">
+          Job details
+        </button>
+      </p>
+      <div class="collapse" id="collapseExample">
+        <div class="card card-body">
+          Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. Nihil anim
+          keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident.
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 </body>
 </html>
