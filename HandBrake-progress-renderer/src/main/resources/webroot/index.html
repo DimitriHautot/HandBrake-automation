@@ -52,9 +52,12 @@
           });
       };
 
+      var previousState = undefined, currentState = undefined;
+
       function onProgressMessage(messageBody, cache) {
           var status, progress, hb_body;
-          switch (messageBody["State"]) {
+          currentState = messageBody["State"];
+          switch (currentState) {
               case "SCANNING":
                   status = "Scanning";
                   hb_body = messageBody["Scanning"];
@@ -64,9 +67,6 @@
                   cache["title"].text(hb_body["Title"]);
                   cache["titleCount"].text(hb_body["TitleCount"]);
                   cache["sequenceID-SCANNING"].text(hb_body["SequenceID"]);
-                  cache["scanning-summary"].show();
-                  cache["working-summary"].hide();
-                  cache["workdone-summary"].hide();
                   break;
 
               case "WORKING":
@@ -76,9 +76,6 @@
                   cache["pass"].text(hb_body["Pass"]);
                   cache["passCount"].text(hb_body["PassCount"]);
                   cache["rateAvg"].text(parseFloat(hb_body["RateAvg"]).toFixed(2));
-                  cache["scanning-summary"].hide();
-                  cache["working-summary"].show();
-                  cache["workdone-summary"].hide();
                   break;
 
               case "WORKDONE":
@@ -87,9 +84,6 @@
                   progress = 1;
                   $("#errorCount").text(hb_body["Error"]);
                   cache["sequenceID-WORKDONE"].text(hb_body["SequenceID"]);
-                  cache["scanning-summary"].hide();
-                  cache["working-summary"].hide();
-                  cache["workdone-summary"].show();
                   break;
           }
           var progressPercent = Math.round(progress * 100);
@@ -98,6 +92,27 @@
           cache["progress"].text(progressPercent + "%");
           cache["progress"].attr("aria-valuenow", progressPercent);
           cache["progress"].width(progressPercent + "%");
+
+          if (currentState !== previousState) {
+              switch (currentState) {
+                  case "SCANNING":
+                      cache["scanning-summary"].show();
+                      cache["working-summary"].hide();
+                      cache["workdone-summary"].hide();
+                      break;
+                  case "WORKING":
+                      cache["scanning-summary"].hide();
+                      cache["working-summary"].show();
+                      cache["workdone-summary"].hide();
+                      break;
+                  case "WORKDONE":
+                      cache["scanning-summary"].hide();
+                      cache["working-summary"].hide();
+                      cache["workdone-summary"].show();
+                      break;
+              }
+          }
+          previousState = currentState;
       }
   </script>
 </head>
