@@ -2,6 +2,7 @@
 
 # Inspired by https://stackoverflow.com/a/49178529/967410
 
+import re
 import sys
 import zmq
 import json
@@ -37,25 +38,17 @@ def handle_event(event: dict, event_type: str) -> None:
 
 
 def send_message(topic: str, payload: str):
-    # message: str = payload
-    # if topic is not None and len(topic) > 0:
-    #     message = f"{topic} {payload}"
-    # socket.send_string(message)
     socket.send_multipart([bytes(topic, "UTF-8"), bytes(payload, "UTF-8")])
 
 
-# TODO Use more generic regex instead of string comparisons
 def forward_to_event_start(input_stream: Any) -> (str, str, int, bool):
     while True:
         line = input_stream.readline().strip()
-        if line != "Version: {" and line != "Progress: {":
+        matching = re.match("(.*): {", line)
+        if matching is None:
             continue
-        else:
-            if line == "Version: {":
-                return "Version", "{", line.count('{') - line.count('}'), False
-            if line == "Progress: {":
-                return "Progress", "{", line.count('{') - line.count('}'), False
-            return "Unknown", "{", line.count('{') - line.count('}'), False
+        event_type = matching.group(0)
+        return event_type, "{", line.count('{') - line.count('}'), False
 
 
 def main(argv: [str]) -> None:
