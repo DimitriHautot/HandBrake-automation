@@ -2,7 +2,7 @@ version: 1
 disable_existing_loggers: False
 formatters:
   simple:
-    format: '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+    format: '%(asctime)s - %(name)s - %(threadName)s - %(levelname)s - %(message)s'
 handlers:
   console:
     class: logging.StreamHandler
@@ -10,10 +10,10 @@ handlers:
     formatter: simple
     stream: ext://sys.stdout
 root:
-  level: INFO
+  level: DEBUG
   handlers: [console]
 loggers:
-  ema.utils:
+  sarge:
     level: INFO
     handlers: [console]
     propagate: no
