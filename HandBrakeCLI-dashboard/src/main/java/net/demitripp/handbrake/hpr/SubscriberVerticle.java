@@ -17,7 +17,7 @@ public class SubscriberVerticle extends AbstractVerticle {
 
   @Override
   public void start() {
-    subscriber = new Subscriber("tcp://localhost:5678", "foo", vertx);
+    subscriber = new Subscriber("tcp://localhost:5678", "progress", vertx);
     executor = Executors.newFixedThreadPool(2, r -> {
       Thread thread = new Thread(r);
       thread.setUncaughtExceptionHandler((t, e) -> e.printStackTrace());

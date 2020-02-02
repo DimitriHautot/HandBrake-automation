@@ -4,7 +4,7 @@ import time
 import sys
 import signal
 import utils
-import handbrake_parser
+import handbrake_wrapper
 
 
 def signal_handler(sig, frame):
@@ -15,7 +15,7 @@ def signal_handler(sig, frame):
             "SequenceID": 1
         }
     }
-    handbrake_parser.handle_event(work_done, "Progress")
+    handbrake_wrapper.handle_progress_event(work_done, "Progress")
 
     sys.exit(0)
 
@@ -104,25 +104,25 @@ def main(argv: [str]) -> None:
     }
 
     while True:
-        handbrake_parser.handle_event(version, "Version")
+        handbrake_wrapper.handle_progress_event(version, "Version")
         time.sleep(1)
 
         for scan in scans:
-            handbrake_parser.handle_event(scan, "Progress")
+            handbrake_wrapper.handle_progress_event(scan, "Progress")
             time.sleep(1)
 
         for pc in range(1, 100):
             working["Working"]["Progress"] = float(pc % 100) / 100
             working["Working"]["RateAvg"] = float(random.randrange(15, 35) / 100)
-            handbrake_parser.handle_event(working, "Progress")
+            handbrake_wrapper.handle_progress_event(working, "Progress")
             time.sleep(0.25)
 
-        handbrake_parser.handle_event(workdone, "Progress")
+        handbrake_wrapper.handle_progress_event(workdone, "Progress")
         time.sleep(3)
 
 
 if __name__ == '__main__':
     signal.signal(signal.SIGINT, signal_handler)
     utils.setup_logging("../../main/resources/logging.yaml")
-    handbrake_parser.setup_zmq()
+    handbrake_wrapper.setup_zmq()
     main(sys.argv)

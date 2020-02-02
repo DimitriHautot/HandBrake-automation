@@ -39,7 +39,7 @@ public class Subscriber implements Runnable {
         continue;
       }
       String message = new String(recv);
-//      System.out.println("Received message " + message);
+      System.out.println("Received message " + message);
       vertx.eventBus().publish("encoding.update", message);
     }
 

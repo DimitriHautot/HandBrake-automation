@@ -17,11 +17,11 @@ signal.signal(signal.SIGINT, signal_handler)
 utils.setup_logging("../../main/resources/logging.yaml")
 
 # Socket to talk to server
-port = 5678
+port_progress = 5678
 context = zmq.Context()
 socket = context.socket(zmq.SUB)
-socket.setsockopt_string(zmq.SUBSCRIBE, "foo")
-socket.connect("tcp://127.0.0.1:%s" % port)
+socket.setsockopt_string(zmq.SUBSCRIBE, "progress")
+socket.connect("tcp://127.0.0.1:%s" % port_progress)
 
 while True:
     topic, event = socket.recv_multipart()
