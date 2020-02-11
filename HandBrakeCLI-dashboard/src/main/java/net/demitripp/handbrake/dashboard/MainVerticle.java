@@ -10,6 +10,7 @@ import io.vertx.ext.web.handler.StaticHandler;
 import io.vertx.ext.web.handler.sockjs.BridgeOptions;
 import io.vertx.ext.web.handler.sockjs.SockJSHandler;
 import io.vertx.ext.web.handler.sockjs.SockJSHandlerOptions;
+import org.zeromq.ZMQ;
 
 public class MainVerticle extends AbstractVerticle {
 
@@ -19,8 +20,13 @@ public class MainVerticle extends AbstractVerticle {
 
   @Override
   public void start(Promise<Void> startPromise) {
-    vertx.deployVerticle(new ProgressEventSubscriberVerticle());
-    vertx.deployVerticle(new ConsoleEventSubscriberVerticle());
+    // TODO build this dynamically
+    Configuration configuration = new Configuration("tcp://localhost:5678", 5,
+      true, true, 8888);
+
+    final ZMQ.Context context = ZMQ.context(1);
+    vertx.deployVerticle(new ProgressEventSubscriberVerticle(configuration, context));
+    vertx.deployVerticle(new ConsoleEventSubscriberVerticle(configuration, context));
 //    vertx.deployVerticle(new ProgressRendererSpyVerticle());
 
     Router router = Router.router(vertx);
@@ -42,7 +48,7 @@ public class MainVerticle extends AbstractVerticle {
 
     HttpServer server = vertx.createHttpServer();
 
-    server.requestHandler(router).listen(8888);
+    server.requestHandler(router).listen(configuration.getWebServerPort());
     startPromise.complete();
   }
 }

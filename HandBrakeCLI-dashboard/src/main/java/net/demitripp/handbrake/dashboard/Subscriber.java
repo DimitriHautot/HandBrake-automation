@@ -11,7 +11,7 @@ import java.util.Arrays;
  */
 public class Subscriber implements Runnable {
 
-  private final ZMQ.Context context = ZMQ.context(1);
+  private final ZMQ.Context context;
   private final String address;
   private final String topic;
   private final byte[] topicBytes;
@@ -21,7 +21,8 @@ public class Subscriber implements Runnable {
   private ZMQ.Socket subscriber;
   private volatile boolean stop = false;
 
-  Subscriber(String address, String topic, String eventType, Vertx vertx, boolean verbose) {
+  Subscriber(ZMQ.Context context, String address, String topic, String eventType, Vertx vertx, boolean verbose) {
+    this.context = context;
     this.address = address;
     this.topic = topic;
     this.topicBytes = topic.getBytes();
