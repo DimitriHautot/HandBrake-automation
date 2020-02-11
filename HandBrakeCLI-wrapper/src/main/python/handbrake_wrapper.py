@@ -15,31 +15,31 @@ from typing import Any
 
 import zmq
 from sarge import run, Capture
+from threading import Lock
 
 import utils
 
 logger = logging.getLogger(__name__)
 
-port_progress: int = 5678
-socket_progress: zmq.Socket
-port_console: int = 5679
-socket_console: zmq.Socket
+port: int = 5678
+socket: zmq.Socket
 finished: bool = False
+lock = Lock()
 
 
 def setup_zmq() -> None:
-    global socket_progress, socket_console
-    global port_progress, port_console
+    global socket
+    global port
     context = zmq.Context()
-    socket_progress = context.socket(zmq.PUB)
-    socket_progress.bind("tcp://127.0.0.1:%s" % port_progress)
-    socket_console = context.socket(zmq.PUB)
-    socket_console.bind("tcp://127.0.0.1:%s" % port_console)
+    socket = context.socket(zmq.PUB)
+    socket.bind("tcp://127.0.0.1:%s" % port)
 
 
 def send_message(topic: str, payload: str) -> None:
-    socket: zmq.Socket = socket_progress if topic == "progress" else socket_console
+    global socket
+    lock.acquire()
     socket.send_multipart([bytes(topic, "UTF-8"), bytes(payload, "UTF-8")])
+    lock.release()
 
 
 def fast_forward_to_next_event_start(input_stream: Any) -> (str, str, int, bool):
@@ -64,7 +64,6 @@ def handle_progress_event(event: dict, event_type: str) -> None:
 
 def handle_progress_stream(stream: Any) -> None:
     global finished
-    done = False
     event_type, acc, balance, end_of_stream = fast_forward_to_next_event_start(stream)
 
     while True:
@@ -99,7 +98,6 @@ def handle_console_event(line: str) -> None:
 
 def handle_console_stream(stream: Any) -> None:
     global finished
-    done = False
     in_json_job = False
     acc = ""
     balance: int = 0
@@ -108,6 +106,8 @@ def handle_console_stream(stream: Any) -> None:
         line = bytes(stream.readline(timeout=1)).decode('UTF-8').strip()
         if len(line) > 0:
             handle_console_event(line)
+
+            # TODO Move the JSON job description in the Java dashboard verticle, and expose it with websocket & REST endpoint
             if in_json_job:
                 acc += line
                 balance = balance + line.count('{') - line.count('}')

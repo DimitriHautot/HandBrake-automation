@@ -20,21 +20,24 @@ def init_zmq(argv: [str]) -> None:
     global port
     global socket
 
-    if len(argv) < 3:
-        print("Required arguments missing: <topic-name> <host:port>", file=sys.stderr)
+    if len(argv) < 2:
+        print("Required arguments missing: <topic-name>", file=sys.stderr)
         sys.exit(1)
     # Socket to talk to server
     context = zmq.Context()
     socket = context.socket(zmq.SUB)
     socket.setsockopt_string(zmq.SUBSCRIBE, argv[1])
-    socket.connect(f"tcp://{argv[2]}")
+    socket.connect("tcp://127.0.0.1:5678")
 
 
 def main(argv: [str]) -> None:
     while True:
-        topic, event = socket.recv_multipart()
-        msg = bytes(event).decode("UTF-8")
-        logging.info(msg)
+        frames = socket.recv_multipart()
+        frames = [bytes(frame).decode("UTF-8") for frame in frames]
+        if len(frames) > 2:
+            logging.warning(frames)
+        else:
+            logging.info(f"{frames[0]} {frames[1]}")
 
 
 if __name__ == '__main__':
