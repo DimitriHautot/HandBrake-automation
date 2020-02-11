@@ -1,4 +1,4 @@
-package net.demitripp.handbrake.hpr;
+package net.demitripp.handbrake.dashboard;
 
 import io.vertx.core.Vertx;
 import io.vertx.junit5.VertxExtension;

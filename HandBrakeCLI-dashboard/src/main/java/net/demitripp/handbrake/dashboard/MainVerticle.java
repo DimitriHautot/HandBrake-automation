@@ -1,4 +1,4 @@
-package net.demitripp.handbrake.hpr;
+package net.demitripp.handbrake.dashboard;
 
 import io.vertx.core.AbstractVerticle;
 import io.vertx.core.Launcher;
@@ -19,14 +19,15 @@ public class MainVerticle extends AbstractVerticle {
 
   @Override
   public void start(Promise<Void> startPromise) {
-    vertx.deployVerticle(new SubscriberVerticle());
-    vertx.deployVerticle(new ProgressRendererSpyVerticle());
+    vertx.deployVerticle(new ProgressEventSubscriberVerticle());
+    vertx.deployVerticle(new ConsoleEventSubscriberVerticle());
+//    vertx.deployVerticle(new ProgressRendererSpyVerticle());
 
     Router router = Router.router(vertx);
 
     SockJSHandlerOptions sockJSHandlerOptions = new SockJSHandlerOptions().setHeartbeatInterval(2_000);
     SockJSHandler sockJSHandler = SockJSHandler.create(vertx, sockJSHandlerOptions);
-    PermittedOptions outboundPermitted1 = new PermittedOptions().setAddress("encoding.update");
+    PermittedOptions outboundPermitted1 = new PermittedOptions().setAddress("progress.update");
     BridgeOptions bridgeOptions = new BridgeOptions().addOutboundPermitted(outboundPermitted1);
     sockJSHandler.bridge(bridgeOptions);
 

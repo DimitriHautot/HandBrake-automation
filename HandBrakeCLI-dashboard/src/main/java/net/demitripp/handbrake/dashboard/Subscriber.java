@@ -1,4 +1,4 @@
-package net.demitripp.handbrake.hpr;
+package net.demitripp.handbrake.dashboard;
 
 import io.vertx.core.Vertx;
 import org.zeromq.SocketType;
@@ -15,15 +15,19 @@ public class Subscriber implements Runnable {
   private final String address;
   private final String topic;
   private final byte[] topicBytes;
-  private Vertx vertx;
+  private final String eventType;
+  private final Vertx vertx;
+  private final boolean verbose;
   private ZMQ.Socket subscriber;
   private volatile boolean stop = false;
 
-  Subscriber(String address, String topic, Vertx vertx) {
+  Subscriber(String address, String topic, String eventType, Vertx vertx, boolean verbose) {
     this.address = address;
     this.topic = topic;
     this.topicBytes = topic.getBytes();
+    this.eventType = eventType;
     this.vertx = vertx;
+    this.verbose = verbose;
   }
 
   @Override
@@ -39,8 +43,10 @@ public class Subscriber implements Runnable {
         continue;
       }
       String message = new String(recv);
-      System.out.println("Received message " + message);
-      vertx.eventBus().publish("encoding.update", message);
+      if (verbose) {
+        System.out.println(String.format("[%s] Received message: %s", topic, message));
+      }
+      vertx.eventBus().publish(eventType, message);
     }
 
     cleanup();
