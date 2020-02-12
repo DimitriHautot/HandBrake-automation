@@ -25,6 +25,7 @@ port: int = 5678
 socket: zmq.Socket
 finished: bool = False
 lock = Lock()
+readline_timeout = 1
 
 
 def setup_zmq() -> None:
@@ -43,8 +44,9 @@ def send_message(topic: str, payload: str) -> None:
 
 
 def fast_forward_to_next_event_start(input_stream: Any) -> (str, str, int, bool):
+    global readline_timeout
     while not finished:
-        line = bytes(input_stream.readline(timeout=1)).decode('UTF-8').strip()
+        line = bytes(input_stream.readline(timeout=readline_timeout)).decode('UTF-8').strip()
         matching = re.match("(.*): {", line)
         if matching is None:
             continue
@@ -64,10 +66,11 @@ def handle_progress_event(event: dict, event_type: str) -> None:
 
 def handle_progress_stream(stream: Any) -> None:
     global finished
+    global readline_timeout
     event_type, acc, balance, end_of_stream = fast_forward_to_next_event_start(stream)
 
     while True:
-        line = bytes(stream.readline(timeout=1)).decode('UTF-8').strip()
+        line = bytes(stream.readline(timeout=readline_timeout)).decode('UTF-8').strip()
         if len(line) > 0:
             acc += line
             balance = balance + line.count('{') - line.count('}')
@@ -98,12 +101,13 @@ def handle_console_event(line: str) -> None:
 
 def handle_console_stream(stream: Any) -> None:
     global finished
+    global readline_timeout
     in_json_job = False
     acc = ""
     balance: int = 0
 
     while True:
-        line = bytes(stream.readline(timeout=1)).decode('UTF-8').strip()
+        line = bytes(stream.readline(timeout=readline_timeout)).decode('UTF-8').strip()
         if len(line) > 0:
             handle_console_event(line)
 
@@ -130,6 +134,7 @@ def handle_console_stream(stream: Any) -> None:
 
 def wrap_handbrake_process(configuration: dict) -> None:
     global finished
+    global readline_timeout
     command_line = f"'{configuration.get('handbrake_cli_path')}' --json" \
                    f" --inline-parameter-sets --subtitle-lang-list fre --all-subtitles" \
                    f" --preset-import-file '{configuration.get('preset_file')}'" \
@@ -152,13 +157,14 @@ def wrap_handbrake_process(configuration: dict) -> None:
         return_code = pipeline.commands[0].poll()
         time.sleep(1)
 
+    time.sleep(readline_timeout + 1)
     finished = True
 
     thread_progress.join()
     thread_console.join()
 
-    # Don't close the 2 capture's, otherwise this will end the streams remainder abruptly.
-    # Seems strange, though.
+    capture_progress.close()
+    capture_console.close()
 
     # That's all folks!
 
