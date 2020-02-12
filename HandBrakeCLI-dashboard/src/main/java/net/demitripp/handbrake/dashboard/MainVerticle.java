@@ -29,26 +29,28 @@ public class MainVerticle extends AbstractVerticle {
     vertx.deployVerticle(new ConsoleEventSubscriberVerticle(configuration, context));
 //    vertx.deployVerticle(new ProgressRendererSpyVerticle());
 
-    Router router = Router.router(vertx);
+    Router mainRouter = Router.router(vertx);
 
     SockJSHandlerOptions sockJSHandlerOptions = new SockJSHandlerOptions().setHeartbeatInterval(2_000);
     SockJSHandler sockJSHandler = SockJSHandler.create(vertx, sockJSHandlerOptions);
     PermittedOptions outboundPermitted1 = new PermittedOptions().setAddress("progress.update");
     BridgeOptions bridgeOptions = new BridgeOptions().addOutboundPermitted(outboundPermitted1);
     sockJSHandler.bridge(bridgeOptions);
-
-    router.route("/event-bus/*").handler(sockJSHandler);
+    mainRouter.route("/event-bus/*").handler(sockJSHandler);
 
     StaticHandler staticHandler = StaticHandler.create()
       .setFilesReadOnly(false)  // TODO Conditional to development mode?
       .setCachingEnabled(false)
       ;
-    router.route("/static/*").handler(staticHandler);
-    router.route("/*").handler(staticHandler);
+    mainRouter.route("/static/*").handler(staticHandler);
+    mainRouter.route("/*").handler(staticHandler);
+
+    Router restAPI = new ApiRouter(vertx);
+    mainRouter.mountSubRouter("/api", restAPI);
 
     HttpServer server = vertx.createHttpServer();
 
-    server.requestHandler(router).listen(configuration.getWebServerPort());
+    server.requestHandler(mainRouter).listen(configuration.getWebServerPort());
     startPromise.complete();
   }
 }
