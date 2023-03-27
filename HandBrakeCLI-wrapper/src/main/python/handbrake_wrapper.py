@@ -115,14 +115,14 @@ def handle_console_stream(stream: Any) -> None:
             if in_json_job:
                 acc += line
                 balance = balance + line.count('{') - line.count('}')
-                try:
-                    if balance == 0:
+                if balance == 0:
+                    try:
                         job = json.loads(acc)
                         in_json_job = False
                         # TODO How to expose it to HandBrake-progress-renderer?
                         logger.info(f"Job description detected: {job}")
-                except JSONDecodeError:
-                    pass
+                    except JSONDecodeError:
+                        pass
             if line.endswith("json job:"):
                 in_json_job = True
         else:

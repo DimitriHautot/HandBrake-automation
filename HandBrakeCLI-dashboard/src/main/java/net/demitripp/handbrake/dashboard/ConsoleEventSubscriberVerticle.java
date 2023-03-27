@@ -2,6 +2,8 @@ package net.demitripp.handbrake.dashboard;
 
 import io.vertx.core.AbstractVerticle;
 import io.vertx.core.Promise;
+import net.demitripp.handbrake.dashboard.event.ConsoleEvent;
+import net.demitripp.handbrake.dashboard.event.ConsoleEventCodec;
 import org.zeromq.ZMQ;
 
 import java.util.concurrent.ExecutorService;
@@ -25,6 +27,8 @@ public class ConsoleEventSubscriberVerticle extends AbstractVerticle {
 
   @Override
   public void start() {
+    vertx.eventBus().registerDefaultCodec(ConsoleEvent.class, new ConsoleEventCodec());
+
     subscriber = new Subscriber(this.context, configuration.getZmqEndpoint(), "console", "console.update", vertx, configuration.isConsoleEventsVerbose());
     executor = Executors.newFixedThreadPool(2, r -> {
       Thread thread = new Thread(r);
@@ -41,6 +45,7 @@ public class ConsoleEventSubscriberVerticle extends AbstractVerticle {
     executor.shutdown();
     executor.awaitTermination(configuration.getTerminationTimeoutSeconds(), TimeUnit.SECONDS);
 
+    vertx.eventBus().unregisterDefaultCodec(ConsoleEvent.class);
     stopPromise.complete();
   }
 }

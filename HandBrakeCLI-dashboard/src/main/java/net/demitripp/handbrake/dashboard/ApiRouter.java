@@ -2,9 +2,11 @@ package net.demitripp.handbrake.dashboard;
 
 import io.vertx.core.Vertx;
 import io.vertx.core.eventbus.Message;
+import io.vertx.core.json.DecodeException;
 import io.vertx.core.json.JsonObject;
 import io.vertx.ext.web.Router;
 import io.vertx.ext.web.impl.RouterImpl;
+import net.demitripp.handbrake.dashboard.event.ConsoleEvent;
 
 /**
  * @author Dimitri Hautot
@@ -12,6 +14,7 @@ import io.vertx.ext.web.impl.RouterImpl;
 public class ApiRouter extends RouterImpl implements Router {
 
   private Message<Object> latestConsoleEventMessage, latestProgressEventMessage;
+  private JsonObject jsonJob;
   private boolean inJsonJob;
   private String accumulator = "";
   private int balance = 0;
@@ -32,6 +35,7 @@ public class ApiRouter extends RouterImpl implements Router {
       String result = new JsonObject()
         .put("latestConsoleEvent", latestConsoleEventMessage.body())
         .put("progressConsoleEvent", latestProgressEventMessage.body())
+        .put("jsonJob", this.jsonJob)
         .toString();
       rc.response()
         .putHeader("Content-Length", String.valueOf(result.length()))
@@ -40,7 +44,22 @@ public class ApiRouter extends RouterImpl implements Router {
     });
   }
 
-  private void detectJsonJob(Message<Object> message) {
-
+  private void detectJsonJob(Message<Object> consoleEventMessage) {
+    ConsoleEvent consoleEvent = (ConsoleEvent) consoleEventMessage.body();
+    if (consoleEvent.getData().endsWith("json job:")) {
+      this.inJsonJob = true;
+    } else if (this.inJsonJob) {
+      this.accumulator += consoleEvent.getData();
+      this.balance += consoleEvent.getData().chars().filter(ch -> ch == '{').count()
+        - consoleEvent.getData().chars().filter(ch -> ch == '}').count();
+      if (this.balance == 0) {
+        try {
+          this.jsonJob = new JsonObject(this.accumulator);
+          this.inJsonJob = false;
+        } catch (DecodeException decodeException) {
+          // False positive
+        }
+      }
+    }
   }
 }
